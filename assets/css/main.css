@@ -1236,6 +1236,29 @@ z-index: -1;
 }
 
 /* <edit.html> */
+/* 리스트 스타일링 */
+.ul-list {
+  list-style-type: disc;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.ul-li {
+  color: #727272; /* 기본컬러 */
+  padding: 4px 0;
+}
+
+/* ol 스타일 */
+.ol-list {
+  list-style-type: decimal;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.ol-li {
+  color: #727272;
+  padding: 4px 0;
+}
 .edit .f-14 {
   color: #727272;
   font-size: 14px;
@@ -1396,7 +1419,7 @@ z-index: -1;
 }
 .edit .title-color {
   top: 0px !important;
-  left: 12px !important;
+  left: -55px !important;
 }
 .edit .style-pop {
   position: relative;
@@ -1424,49 +1447,98 @@ z-index: -1;
   display: flex;
   flex-direction: column;
 }
-.edit .right-panel .g-15 {
+.edit .g-15 {
   gap: 15px;
 }
-.edit .circle {
-  width: 10px;
-  height: 10px;
-  display: block;
-  background-color: #222222;
-  border-radius: 50%;
-}
-.edit .color-white,
-.edit .color-default,
-.edit .color-a,
-.edit .color-b,
-.edit .color-c,
+.edit .circle-color,
 .edit .color-title {
   width: 20px;
   height: 20px;
-}
-.edit .color-white {
-  background-color: #ffffff;
-  border: 1px solid #000000;
-}
-.edit .color-default {
-  background-color: #000000;
-}
-.edit .color-a {
+  display: block;
   background-color: #727272;
+  border-radius: 50%;
 }
-.edit .color-b {
-  background-color: #ef3333;
+.edit .flex {
+  display: flex;
 }
-.edit .color-c {
-  background-color: #ff8329;
+.edit .flex-direc {
+  flex-direction: column;
+}
+.edit .right-panel .array-box .array-img-20 {
+  min-width: 20px;
+  min-height: 20px;
+  width: 100%;
 }
 .edit .color-title {
+  background-color: #292929;
+}
+/* 폰트 컬러 */
+.edit .color-1 {
+  background-color: #fefefe;
+  border: 1px solid #727272;
+}
+.edit .color-2 {
+  background-color: #9d4c4c;
+}
+.edit .color-3 {
+  background-color: #f67e3b;
+}
+.edit .color-4 {
+  background-color: #1ba80f;
+}
+.edit .color-5 {
+  background-color: #6e31ee;
+}
+.edit .color-6 {
+  background-color: #727272;
+}
+.edit .color-7 {
+  background-color: #e7425f;
+}
+.edit .color-8 {
   background-color: #fdcc32;
 }
+.edit .color-9 {
+  background-color: #317dee;
+}
+.edit .color-10 {
+  background-color: #c50eb3;
+}
+/* 배경컬러 */
+.edit .color-a {
+  background-color: #ffe4e1;
+}
+.edit .color-b {
+  background-color: #f0fff0;
+}
+.edit .color-c {
+  background-color: #e6f0ff;
+}
+.edit .color-d {
+  background-color: #f0e6ff;
+}
+.edit .color-e {
+  background-color: #fdf5e6;
+}
+.edit .color-f {
+  background-color: #ffb6c1;
+}
+.edit .color-g {
+  background-color: #8dde8d;
+}
+.edit .color-h {
+  background-color: #a0c6ff;
+}
+.edit .color-i {
+  background-color: #d8bfd8;
+}
+
 .edit .list-num .number {
   font-size: 12px;
 }
 /* 링크버튼 모달 */
-.edit .link-modal {
+.edit .link-modal,
+.edit .hashtag-modal {
   display: none;
   position: fixed;
   z-index: 1000;
@@ -1500,7 +1572,14 @@ z-index: -1;
   cursor: pointer;
   line-height: 0;
 }
-
+/* 해쉬태그 입력 모달창 */
+.edit .hashtag-modal .yellow {
+  display: block;
+}
+.edit .hashtag-modal .border-ef {
+  width: 100%;
+  overflow-y: scroll;
+}
 /* ------푸터 --------*/
 .footer {
   background-color: #f8f8f8;
@@ -1663,7 +1742,7 @@ z-index: -1;
   }
   .edit .title-color {
     top: 0px !important;
-    left: -33px !important;
+    left: -103px !important;
   }
 
   /* 해더 */
@@ -1824,6 +1903,9 @@ z-index: -1;
   }
   .edit .right-panel .array-box {
     left: -68px;
+  }
+  .edit .right-panel .left-position {
+    left: -118px;
   }
   /* 푸터 */
   .footer .social-icons {

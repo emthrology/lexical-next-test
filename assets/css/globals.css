@@ -1,8 +1,3 @@
-.editor-with-toolbar {
-  display: flex;
-  align-items: flex-start;
-}
-
 .editor-input {
   flex: 1;
   min-height: 300px;
@@ -13,40 +8,4 @@
   min-height: 600px;
   max-height: 600px;
   overflow-y: scroll;
-}
-
-.editor-bold {
-  font-weight: bold;
-}
-.editor-italic {
-  font-style: italic;
-}
-.editor-underline {
-  text-decoration: underline;
-}
-.editor-highlight {
-  background-color: yellow;
-}
-.editor-red {
-  color: red;
-}
-
-.vertical-toolbar {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  border-left: 1px solid #ddd;
-}
-
-.vertical-toolbar button {
-  margin-bottom: 8px;
-  padding: 6px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.vertical-toolbar button:hover {
-  background: #f0f0f0;
 }

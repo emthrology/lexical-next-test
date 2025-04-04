@@ -30,6 +30,27 @@ export class ImageNode extends DecoratorNode {
   }
 
   // TODO exportDOM, importDOM 메서드 구현
+  exportDOM() {
+    // DOM 요소를 반환하는 메서드
+    const element = document.createElement('img');
+    element.className = 'm-t-50 post-image';
+    element.setAttribute('src', this.__src);
+    element.setAttribute('alt', this.__alt);
+    return { element };
+  }
+  importDOM() {
+    // DOM 요소를 Lexical 노드로 변환하는 메서드
+    return {
+      img: (node) => {
+        const src = node.getAttribute('src');
+        const alt = node.getAttribute('alt');
+        return {
+          node: new ImageNode(src, alt),
+          leave: true,
+        };
+      },
+    };
+  }
 
   // 중요: decorate 메서드는 반드시 React 컴포넌트를 반환해야 함
   decorate() {
