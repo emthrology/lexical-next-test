@@ -1,0 +1,534 @@
+@charset "UTF-8";
+/* 프리텐다드 폰트 (기본설정) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+/* 나눔고딕 폰트 */
+@import url('https://fonts.googleapis.com/earlyaccess/nanumgothic.css');
+/* 나눔명조 폰트 */
+@import url('https://fonts.googleapis.com/earlyaccess/nanummyeongjo.css');
+@font-face {
+  font-family: 'Paperlogy-8ExtraBold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2')
+    format('woff2');
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@supports (-webkit-touch-callout: none) {
+  .Paperlogy-text {
+    font-weight: 10; /* 사파리에서만 폰트 웨이트 낮추기 */
+  }
+}
+@supports (-webkit-appearance: none) {
+  input {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+  }
+}
+
+.nanumgothic {
+  font-family: 'nanumgothic';
+  font-weight: 400;
+}
+/* 나눔바른고딕 폰트 */
+@font-face {
+  font-family: 'NanumBarunGothic';
+  font-style: normal;
+  font-weight: 400;
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix')
+      format('embedded-opentype'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff2')
+      format('woff2'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'NanumBarunGothic';
+  font-style: normal;
+  font-weight: 700;
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot');
+  src: url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix')
+      format('embedded-opentype'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff2')
+      format('woff2'),
+    url('//fastly.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf')
+      format('truetype');
+}
+.nanumbarungothic {
+  font-family: 'NanumBarunGothic';
+}
+
+.nanummyeongjo {
+  font-family: 'nanummyeongjo';
+  font-weight: 400;
+}
+/* 마루부리 폰트 */
+@font-face {
+  font-family: 'MaruBuri';
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot);
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot?#iefix)
+      format('embedded-opentype'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2)
+      format('woff2'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff)
+      format('woff'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'MaruBuriSemiBold';
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.eot);
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.eot?#iefix)
+      format('embedded-opentype'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2)
+      format('woff2'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff)
+      format('woff'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'MaruBuriBold';
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.eot);
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.eot?#iefix)
+      format('embedded-opentype'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2)
+      format('woff2'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff)
+      format('woff'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'MaruBuriLight';
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.eot);
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.eot?#iefix)
+      format('embedded-opentype'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2)
+      format('woff2'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff)
+      format('woff'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.ttf)
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'MaruBuriExtraLight';
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.eot);
+  src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.eot?#iefix)
+      format('embedded-opentype'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2)
+      format('woff2'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff)
+      format('woff'),
+    url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.ttf)
+      format('truetype');
+}
+.maruburi {
+  font-family: 'MaruBuri';
+  font-weight: 400;
+}
+
+/* 스타일 초기화 */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
+input::-webkit-contacts-auto-fill-button {
+  visibility: hidden !important;
+  display: none !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: 0 !important;
+}
+
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden !important;
+  display: none !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: 0 !important;
+}
+select {
+  appearance: none; /* 기본 스타일 제거 (Webkit, Firefox 지원) */
+  -webkit-appearance: none; /* Safari, Chrome */
+  -moz-appearance: none; /* Firefox */
+
+  border: none; /* 기본 테두리 제거 */
+  background: none; /* 배경 제거 */
+  font-size: 16px; /* 원하는 폰트 크기로 설정 */
+  font-family: inherit; /* 부모 폰트 상속 */
+  padding: 8px 12px; /* 내부 여백 */
+  width: 100%; /* 너비 조절 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  /* 화살표 추가 */
+  background-image: url('/img/edit/select-arrow.png');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+/* IE에서 기본 스타일 제거 (필수) */
+select::-ms-expand {
+  display: none;
+}
+select:focus {
+  border-color: #fdcc32;
+  outline: none;
+}
+
+* {
+  font-family: 'Pretendard Variable', sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  letter-spacing: -0.25px;
+  line-height: 158%;
+}
+
+body {
+  background-color: #fefefe;
+  color: #333;
+  height: 100%;
+  margin: 0;
+  /* display: flex;
+    flex-direction: column; */
+  min-height: 100vh;
+}
+ul,
+ol {
+  list-style: none;
+  padding-inline-start: 0;
+}
+a {
+  text-decoration: none;
+  text-decoration: none;
+  letter-spacing: -0.36px;
+  color: #292929;
+}
+img {
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+button,
+input,
+textarea {
+  font: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+button,
+a {
+  cursor: pointer;
+}
+input {
+  background: #fefefe;
+  border-radius: 10px;
+}
+label {
+  display: block;
+}
+textarea {
+  resize: none;
+}
+/* 체크박스 커스텀 */
+.custom-checkbox {
+  display: inline-block;
+  position: relative;
+  padding-left: 24px; /* 체크박스 크기 + 여백 */
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* 체크박스 숨기기 */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* 체크박스 모양 */
+.checkmark {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #727272;
+}
+
+/* 체크 시 배경색 변경 */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #fdcc32; /* 체크 시 배경색 */
+  border: none;
+}
+
+/* 체크 표시 모양 */
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* 체크 시 체크 표시 보여주기 */
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* 체크 표시 스타일 */
+.custom-checkbox .checkmark:after {
+  left: 7px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+} /* 여기까지 체크박스 커스텀 */
+
+.paperlogy {
+  font-family: 'Paperlogy-8ExtraBold', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-weight: 500;
+}
+
+/* <공통적용> */
+.m-t-20 {
+  margin-top: 20px;
+}
+.m-t-30 {
+  margin-top: 30px;
+}
+.m-t-40 {
+  margin-top: 40px;
+}
+.m-t-50 {
+  margin-top: 50px;
+}
+.m-t-60 {
+  margin-top: 60px;
+}
+.m-t-90 {
+  margin-top: 60px;
+}
+.m-t-100 {
+  margin-top: 100px;
+}
+
+.btn-01 {
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background-color: #fefefe;
+  color: #fdcc32;
+  border-radius: 10px;
+  border: 1px solid #fdcc32;
+}
+.btn-01:hover {
+  background-color: #fdcc32;
+  color: #ffffff;
+}
+.btn-01:active {
+  background-color: #fdcc32;
+  color: #ffffff;
+}
+.btn-02 {
+  background-color: #fdcc32;
+  color: #202020;
+  border: none;
+  border-radius: 10px;
+  font-weight: 400;
+  cursor: pointer;
+  height: fit-content;
+  border: 1px solid #fdcc32;
+}
+.btn-02:hover {
+  background-color: #ffffff;
+  color: #fdcc32;
+  border: 1px solid #fdcc32;
+}
+.btn-02:active {
+  background-color: #cc9900;
+  color: #ffffff;
+}
+.btn-03 {
+  background-color: #fff3e4;
+  color: #202020;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 6px 24px;
+}
+.btn-03:hover {
+  background-color: #fdcc32;
+  color: #ffffff;
+}
+.btn-03:active {
+  background-color: #cc9900;
+  color: #ffffff;
+}
+.btn-04 {
+  border-color: #919191;
+  color: #717171;
+  background-color: #f8f8f8;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+}
+.btn-04:hover {
+  border-color: #919191;
+  color: #717171;
+  background: #ececec;
+  border: 1px solid #fffdea;
+}
+
+.user-btn {
+  width: 100%;
+  border-radius: 10px;
+  padding: 17.5px 0;
+  color: #202020;
+  background: #fdcc32;
+  font-size: 17px;
+}
+.user-btn:hover {
+  background: #fbc02d;
+  color: #202020;
+}
+
+.input-01 {
+  width: 100%;
+  padding: 15px 16px;
+  box-sizing: border-box;
+  border: 1px solid #d9d9d9;
+  font-size: 18px;
+  font-weight: 400;
+  color: #292929;
+  letter-spacing: -0.36px;
+}
+.input-01:focus {
+  outline: 1px solid #fdcc32;
+}
+
+.input-01::placeholder {
+  font-size: 16px;
+  font-weight: 400;
+  color: #cecece;
+}
+
+.radius-20 {
+  border-radius: 20px;
+}
+.radius-50 {
+  border-radius: 50px;
+}
+.yellow {
+  color: #fdcc32;
+}
+.border-ef {
+  border-radius: 10px;
+  border: 1px solid #efefef;
+  padding: 10px 16px;
+}
+.iconW-24 {
+  width: 24px;
+  height: 24px;
+}
+
+/* 팝업 */
+.show-pop {
+  display: block;
+}
+
+.hide-pop {
+  display: none;
+}
+
+.pop-wrap {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background: #00000081;
+  border: 1px solid #ddd;
+}
+.pop-inner {
+  width: fit-content;
+  padding: 30px;
+  background: #fefefe;
+  border: 2px solid #eee;
+  border-radius: 15px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.pop-text {
+  font-size: 25px;
+  font-weight: 500;
+}
+.pop-inner .quit-text {
+  font-size: 20px;
+}
+.refresh-check-pop .pop-text {
+  text-align: center;
+}
+.pop-text-caption {
+  display: block;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #868686;
+}
+.popBtn-wrap {
+  width: 100%;
+  margin-top: 32px;
+  display: flex;
+  gap: 20px;
+}
+.popBtn-wrap .popBtn-item {
+  flex: 1;
+}
+.popBtn-wrap .btn-01 {
+  padding: 15px !important;
+  width: 100% !important;
+  font-size: 20px;
+}
+.popBtn-wrap .btn-02 {
+  padding: 15px;
+  width: 100%;
+  font-size: 20px;
+}
+
+/* 인풋태그등 스타일 촉화 추가... */
+
+@media screen and (max-width: 480px) {
+  .mob {
+    display: block;
+  }
+}
