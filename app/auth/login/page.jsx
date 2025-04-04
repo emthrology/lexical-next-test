@@ -88,7 +88,7 @@ export default function page() {
 
           <ul className="user-account">
             <li className="user-item">
-              <a href="register-hp.html" className="user-link">
+              <a href="/auth/register" className="user-link">
                 회원가입
               </a>
             </li>
