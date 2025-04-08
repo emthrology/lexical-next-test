@@ -10,7 +10,9 @@ export default function ProfileComponent() {
           블로그를 구독중입니다
         </p>
       </div>
-      <h2 className="main-title paperlogy m-t-50">블로그 제목 자리</h2>
+      <h2 className="main-title paperlogy m-t-50">
+        {user?.title ?? `${user.nickname}의 블로그`}
+      </h2>
       <div className="profile-count-container">
         <div className="profile-box">
           <div className="profile-img">
@@ -19,7 +21,7 @@ export default function ProfileComponent() {
           <div className="profile-text">
             <div className="nick-job-container">
               <p className="nickname">{user?.nickname}</p>
-              <p className="job-title">job_title 자리</p>
+              <p className="job-title">{user?.job ?? '블로거'}</p>
             </div>
             <p className="bio">{user?.description}</p>
           </div>
