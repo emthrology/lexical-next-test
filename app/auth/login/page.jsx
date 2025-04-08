@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-
+import Cookies from 'js-cookie';
 import useUserStore from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 export default function page() {
@@ -11,26 +11,32 @@ export default function page() {
   const [error, setError] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const handleLogin = async () => {
-    // await getCsrfToken();
-    const response = await fetch(`${apiUrl}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        // 'Authorization': `Bearer ${openaiApiKey}`,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!response.ok) {
-      throw new Error('Login failed');
+    try {
+      // await getCsrfToken(); // Uncomment if you need CSRF protection
+      const response = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const userData = await response.json();
+      const token = userData.token;
+      Cookies.set('authToken_blog', token, { expires: 7 }); // 쿠키 만료 기간: 7일
+      // Set the token in a cookie
+      // document.cookie = `authToken=${token}; path=/; secure; samesite=strict; max-age=86400`; // Expires in 1 day (86400 seconds)
+
+      setUser(userData.user);
+      router.push('/'); // Redirect to the home page after login
+    } catch (error) {
+      console.error('Login error:', error);
     }
-
-    const userData = await response.json();
-    const token = userData.token;
-    localStorage.setItem('authToken', token);
-
-    setUser(userData.user);
-    router.push('/'); // Redirect to the home page after login
   };
   return (
     <div className="content-wrap">
@@ -93,12 +99,12 @@ export default function page() {
               </a>
             </li>
             <li className="user-item">
-              <a href="find-id.html" className="user-link">
+              <a href="/auth/login/find" className="user-link">
                 아이디 찾기
               </a>
             </li>
             <li className="user-item">
-              <a href="find-pw.html" className="user-link">
+              <a href="/auth/login/find" className="user-link">
                 비밀번호 찾기
               </a>
             </li>
