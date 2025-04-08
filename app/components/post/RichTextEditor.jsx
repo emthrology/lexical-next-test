@@ -6,6 +6,8 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { VerticalToolbarPlugin } from '@/plugin/lexical/VerticalToolbarPlugin';
 import { ImageNode } from '@/plugin/lexical/ImageNode';
+import { YoutubeNode } from '@/plugin/lexical/YoutubeNode';
+import { YoutubePlugin } from '@/plugin/lexical/YoutubePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
@@ -33,23 +35,28 @@ const editorConfig = {
   onError(error) {
     console.error('Lexical Error:', error);
   },
-  nodes: [ImageNode, ListNode, ListItemNode, LinkNode],
+  nodes: [ImageNode, ListNode, ListItemNode, LinkNode, YoutubeNode],
 };
 
 export default function RichTextEditor() {
   const [titleColorBoxFlag, setTitleColorBoxFlag] = useState(false);
-  const [titleColor, setTitleColor] = useState('#000000');
+  const [titleColor, setTitleColor] = useState('#FDCC32');
   const titleColorList = [
-    { className: 'color-default', color: '#000000' },
-    { className: 'color-title', color: '#FDCC32' },
-    { className: 'color-a', color: '#727272' },
-    { className: 'color-b', color: '#EF3333' },
-    { className: 'color-c', color: '#FF8329' },
-    { className: 'color-white', color: '#FFFFFF' },
+    { color: '#292929', className: 'color-title' },
+    { color: '#9D4C4C', className: 'color-2' },
+    { color: '#F67E3B', className: 'color-3' },
+    { color: '#1BA80F', className: 'color-4' },
+    { color: '#6E31EE', className: 'color-5' },
+    { color: '#727272', className: 'color-6' },
+    { color: '#E7425F', className: 'color-7' },
+    { color: '#FDCC32', className: 'color-8' },
+    { color: '#317DEE', className: 'color-9' },
+    { color: '#C50EB3', className: 'color-10' },
   ];
   const toggleColorBox = () => {
     setTitleColorBoxFlag((prev) => !prev);
   };
+
   const changeTitleColor = (e, type) => {
     const selectedOption = e.target.className.split(' ')[1]; // className에서 두 번째 클래스 이름을 가져옴
     const selectedColor = titleColorList.find((color) => {
@@ -64,20 +71,21 @@ export default function RichTextEditor() {
       console.error('Selected color not found in the list');
     }
   };
-
+  // 그룹화: 한 줄에 5개의 버튼씩 묶음
+  const groupedButtons = (buttons) =>
+    buttons.reduce((acc, button, index) => {
+      if (index % 5 === 0) acc.push([]); // 새로운 그룹 생성
+      acc[acc.length - 1].push(button); // 현재 그룹에 버튼 추가
+      return acc;
+    }, []);
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div id="main">
-        <div className="edit m-t-100">
+        <div className="edit m-t-40">
           <div className="container">
             <div className="icon-bar">
               <ImagePlugin />
-              <button type="button" className="video-btn icon-btn01">
-                <div className="icon-bg">
-                  <img src="/img/edit/video-icon.png" alt="영상 첨부 아이콘" />
-                </div>
-                <span className="icon-text f-14">영상 첨부</span>
-              </button>
+              <YoutubePlugin />
               <LinkButtonPlugin />
               <button type="button" className="place-btn icon-btn01">
                 <div className="icon-bg">
@@ -98,7 +106,8 @@ export default function RichTextEditor() {
                 <div className="title-container">
                   <textarea
                     className="edit-title"
-                    style={{ color: `${titleColor}`, spellcheck: 'false' }}
+                    spellCheck={false}
+                    style={{ color: `${titleColor}` }}
                     placeholder="제목을 작성해 주세요."
                   ></textarea>
                   <div className="btn-area">
@@ -120,35 +129,28 @@ export default function RichTextEditor() {
                         display: `${titleColorBoxFlag ? 'block' : 'none'}`,
                       }}
                     >
-                      <ul className="array-box title-color">
-                        <button
-                          onClick={(e) => changeTitleColor(e, 'title')}
-                          type="button"
-                          className="pop-list"
-                        >
-                          <div className="circle color-default"></div>
-                        </button>
-                        <button
-                          onClick={(e) => changeTitleColor(e, 'title')}
-                          type="button"
-                          className="pop-list"
-                        >
-                          <div className="circle color-title"></div>
-                        </button>
-                        <button
-                          onClick={(e) => changeTitleColor(e, 'title')}
-                          type="button"
-                          className="pop-list"
-                        >
-                          <div className="circle color-b"></div>
-                        </button>
-                        <button
-                          onClick={(e) => changeTitleColor(e, 'title')}
-                          type="button"
-                          className="pop-list"
-                        >
-                          <div className="circle color-c"></div>
-                        </button>
+                      <ul className="array-box title-color flex-direc">
+                        {groupedButtons(titleColorList).map(
+                          (colors, groupIndex) => (
+                            <div key={groupIndex} className="g-15 flex">
+                              {colors.map((item) => (
+                                <button
+                                  key={item.className}
+                                  onClick={
+                                    (e) => changeTitleColor(e, 'title')
+                                    // handleFontStyleChange('color', item.color)
+                                  }
+                                  type="button"
+                                  className="pop-list"
+                                >
+                                  <div
+                                    className={`circle-color ${item.className}`}
+                                  ></div>
+                                </button>
+                              ))}
+                            </div>
+                          )
+                        )}
                       </ul>
                     </div>
                   </div>

@@ -129,11 +129,11 @@ export function VerticalToolbarPlugin() {
       <div className="style-flex-box first-box">
         {/* <FontFamilyPlugin /> */}
         <select onChange={(e) => handleFontStyleChange('font-family', e.target.value)} className="f-14">
-          <option value="Pretendard">프리텐다드</option>
-          <option value="Nanum Gothic">나눔고딕</option>
-          <option value="NanumBarunGothic">나눔바른고딕</option>
-          <option value="Nanum Myeongjo">나눔명조</option>
-          <option value="MaruBuri">마루부리</option>
+          <option value="Pretendard" className="pretendard">프리텐다드</option>
+          <option value="Nanum Gothic" className="nanumgothic">나눔고딕</option>
+          <option value="NanumBarunGothic" className="nanumbarungothic">나눔바른고딕</option>
+          <option value="Nanum Myeongjo" className="nanummyeongjo">나눔명조</option>
+          <option value="MaruBuri" className="maruburi">마루부리</option>
           {/* <option value="Paperlogy">Paperlogy</option> */}
         </select>
         <select defaultValue="18px" onChange={(e) => handleFontStyleChange('font-size', e.target.value)} className="f-14 w-r">
