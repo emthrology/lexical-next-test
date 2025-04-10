@@ -14,7 +14,7 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
     try {
       const response = await fetch(`${apiUrl}/blog-${type}?page=${page}`);
       const result = await response.json();
-      return result[type]?.data || [];
+      return result[type]?.data.reverse() || [];
     } catch (error) {
       console.error('Error fetching data:', error);
       return [];
@@ -65,23 +65,29 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   return (
     <>
       {listStack.map((post, index) => (
-        <a
-          href={post.path}
-          key={index}
-          className="photo-box"
-          style={{ width: 'calc(25% - 15px', height: '228px' }}
-        >
-          <Image
-            src={post.image}
-            alt={post.alt}
-            sizes="(max-width: calc(25% - 15px)) 100vw, (max-width: 228px) 50vw, 33vw"
-            priority={false}
-            width={300}
-            height={228}
-          />
-          <div className="text-box">
-            <h3 className="post-title">{post.title}</h3>
-            <p className="post-date">{post.date}</p>
+        // <div key={index} className="photo-box">
+        //   <a href={post.path}>
+        //     <img src={post.image} alt={post.alt} />
+        //     <div className="text-box">
+        //       <h3 className="post-title">{post.title}</h3>
+        //       <p className="post-date">{post.date}</p>
+        //     </div>
+        //   </a>
+        // </div>
+        <a href={post.path} key={index} className="best-item">
+          <div className="thumbnail" style={{ width: '140px', height: '95px' }}>
+            <Image
+              src={post.image}
+              alt={post.alt}
+              sizes="(max-width: 140px) 100vw, (max-width: 95px) 50vw, 33vw"
+              priority={false}
+              fill
+            />
+            {type == 'trend' && <span className="rank">{index + 1}</span>}
+          </div>
+          <div className="info">
+            <p className="title">{post.title}</p>
+            <p className="date">{post.date}</p>
           </div>
         </a>
       ))}

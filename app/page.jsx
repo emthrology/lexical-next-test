@@ -24,7 +24,13 @@ export default function Home() {
           <h2 className="section-title">인기글</h2>
 
           {/* <LazyMainBlogList type="trend" :page="trendPage" @last-page="alertLast" /> */}
-          <BlogList type="trend" page={trendPage} onLastPage={handleLastPage} />
+          <div className="photo-box-container">
+            <BlogList
+              type="trend"
+              page={trendPage}
+              onLastPage={handleLastPage}
+            />
+          </div>
           <button
             onClick={addTrendPage}
             type="button"
