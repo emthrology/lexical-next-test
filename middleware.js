@@ -48,5 +48,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/post/edit', '/my-info'], // 보호할 경로 지정
+  matcher: ['/my-info', '/blogs/edit',], // 보호할 경로 지정
 };

@@ -1,5 +1,5 @@
 'use client';
-
+import Cookies from 'js-cookie';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -13,8 +13,11 @@ import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { LinkNode } from '@lexical/link';
 import { ImagePlugin } from '@/plugin/lexical/ImagePlugin';
+import { FileNode } from '@/plugin/lexical/FileNode';
 import { useState } from 'react';
+import usePostStore from '@/store/postStore';
 import LinkButtonPlugin from '@/plugin/lexical/LinkButtonPlugin';
+import FileAttachmentPlugin from '@/plugin/lexical/FileAttachmentPlugin';
 const editorConfig = {
   namespace: 'MyEditor',
   theme: {
@@ -35,10 +38,12 @@ const editorConfig = {
   onError(error) {
     console.error('Lexical Error:', error);
   },
-  nodes: [ImageNode, ListNode, ListItemNode, LinkNode, YoutubeNode],
+  nodes: [ImageNode, ListNode, ListItemNode, LinkNode, YoutubeNode, FileNode],
 };
 
 export default function RichTextEditor() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const { postContent, postTitle, setPostTitle } = usePostStore();
   const [titleColorBoxFlag, setTitleColorBoxFlag] = useState(false);
   const [titleColor, setTitleColor] = useState('#FDCC32');
   const titleColorList = [
@@ -78,6 +83,36 @@ export default function RichTextEditor() {
       acc[acc.length - 1].push(button); // 현재 그룹에 버튼 추가
       return acc;
     }, []);
+  const handleSave = async () => {
+    const formData = new FormData();
+    formData.append('title', postTitle);
+    formData.append('board', 'blog');
+    formData.append('category', '36');
+    formData.append('content', postContent);
+    formData.append('public', '1');
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    try {
+      const token = Cookies.get('authToken_blog');
+      console.log(apiUrl, 333);
+      const response = await fetch(`${apiUrl}/blogs`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const { data } = await response.json();
+        console.log('저장된 데이터:', data);
+        alert('저장되었습니다.');
+      }
+    } catch (error) {
+      alert('저장 중 오류가 발생했습니다.');
+      console.error('Error saving data:', error);
+    }
+  };
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div id="main">
@@ -85,20 +120,39 @@ export default function RichTextEditor() {
           <div className="container">
             <div className="icon-bar">
               <ImagePlugin />
-              <YoutubePlugin />
+              {/* <YoutubePlugin /> */}
+              <button
+                type="button"
+                className="link-btn icon-btn01"
+                onClick={() => {
+                  alert('준비종입니다.');
+                }}
+              >
+                <div className="icon-bg">
+                  <img src="/img/edit/video-icon.png" alt="영상 아이콘" />
+                </div>
+                <span className="icon-text f-14">영상</span>
+              </button>
               <LinkButtonPlugin />
-              <button type="button" className="place-btn icon-btn01">
+              <button
+                type="button"
+                className="place-btn icon-btn01"
+                onClick={() => {
+                  alert('준비종입니다.');
+                }}
+              >
                 <div className="icon-bg">
                   <img src="/img/edit/place-icon.png" alt="장소 아이콘" />
                 </div>
                 <span className="icon-text f-14">장소</span>
               </button>
-              <button type="button" className="file-btn icon-btn01">
+              {/* <button type="button" className="file-btn icon-btn01">
                 <div className="icon-bg">
                   <img src="/img/edit/file-icon.png" alt="파일 첨부 아이콘" />
                 </div>
                 <span className="icon-text f-14">파일 첨부</span>
-              </button>
+              </button> */}
+              <FileAttachmentPlugin />
             </div>
 
             <div className="content">
@@ -106,6 +160,10 @@ export default function RichTextEditor() {
                 <div className="title-container">
                   <textarea
                     className="edit-title"
+                    onChange={(e) => {
+                      setPostTitle(e.target.value);
+                    }}
+                    value={postTitle}
                     spellCheck={false}
                     style={{ color: `${titleColor}` }}
                     placeholder="제목을 작성해 주세요."
@@ -171,7 +229,7 @@ export default function RichTextEditor() {
                   </div>
                 </div>
               </div>
-              <VerticalToolbarPlugin />
+              <VerticalToolbarPlugin onSave={handleSave} />
             </div>
           </div>
         </div>

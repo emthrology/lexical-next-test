@@ -1,4 +1,4 @@
-import RichTextEditor from '@/app/components/post/RichTextEditor';
+import RichTextEditor from '@/app/components/blogs/edit/RichTextEditor';
 import React from 'react';
 
 export default function page() {

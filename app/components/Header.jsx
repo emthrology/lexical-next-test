@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import useUserStore from '@/store/userStore';
 export default function Header() {
   const { user, clearUser } = useUserStore();
@@ -24,8 +25,7 @@ export default function Header() {
     // Clear user data in the application state
     clearUser();
     // Remove the authToken cookie by setting it with max-age=0
-    document.cookie =
-      'authToken_blog=; path=/; max-age=0; secure; samesite=strict';
+    Cookies.remove('authToken_blog');
     // Redirect to the home page
     window.location.href = '/';
   };
@@ -95,7 +95,7 @@ export default function Header() {
           <a href="listDetail.html">
             <li className="panel-list">Blog List</li>
           </a>
-          <Link href="/post/edit" onClick={() => setMenuToggle(false)}>
+          <Link href="/blogs/edit" onClick={() => setMenuToggle(false)}>
             <li className="panel-list">Edit</li>
           </Link>
           <Link href="/my-info" onClick={() => setMenuToggle(false)}>

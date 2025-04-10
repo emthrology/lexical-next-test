@@ -1,9 +1,18 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useUserStore from '@/store/userStore';
+import Cookies from 'js-cookie';
 export default function page() {
+  // TODO 내정보에 내 댓글, 내 포스트?(Blog List 메뉴로 갈수도 있음)
+  const [formData, setFormData] = useState(null);
   const { user } = useUserStore();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const inputFields = [
+    { label: '닉네임', id: 'nickname', key: 'nickname', type: 'text' },
+    { label: '아이디', id: 'id', key: 'id', type: 'text' },
+    { label: '블로그 제목', id: 'title', key: 'title', type: 'text' },
+    { label: '직업?', id: 'job', key: 'job', type: 'text' },
+  ];
   const uploadAndInsertImage = async (e) => {
     console.log(e.target.files);
     if (e.target.files === undefined) {
@@ -15,11 +24,12 @@ export default function page() {
       formatData.append('image', file);
 
       try {
+        const token = Cookies.get('authToken_blog');
         const response = await fetch(`${apiUrl}/store-blog-image`, {
           method: 'POST',
           body: formatData,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            Authorization: `Bearer ${token}`,
             // 'ContentType': 'multipart/form-data' // 이 헤더가 수동으로 설정되면 브라우저에서 경계값 을 설정하지 않으므로 주석 처리
           },
         });
@@ -40,6 +50,19 @@ export default function page() {
       }
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        nickname: user.nickname || '',
+        id: user.id || '',
+        title: user.title || '',
+        job: user.job || '',
+        pw: '',
+      });
+    }
+  }, [user]); // 'user'가 변경될 때도 실행되도록 설정
+
   return (
     <div className="content-wrap">
       <div id="main" className="user-auth">
@@ -80,38 +103,31 @@ export default function page() {
             </div>
           </div>
           <div className="input_wrap m-t-40">
-            <div className="input_container">
-              <span className="category">닉네임</span>
-              <div className="flex-mob">
-                <label htmlFor="nickname" className="input_title">
-                  <input className="input-01" type="text" id="nickname" />
-                </label>
+            {/* TODO 반복문처리 */}
+            {inputFields.map((field, index) => (
+              <div
+                className={`input_container ${index !== 0 ? 'm-t-20' : ''}`}
+                key={field.id}
+              >
+                <span className="category">{field.label}</span>
+                <div className="flex-mob">
+                  <label htmlFor={field.id} className="input_title">
+                    <input
+                      className="input-01"
+                      type={field.type}
+                      id={field.id}
+                      value={formData?.[field.key] || ''}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          [field.key]: e.target.value, // 상태 업데이트
+                        });
+                      }}
+                    />
+                  </label>
+                </div>
               </div>
-            </div>
-            <div className="input_container m-t-20">
-              <span className="category">아이디</span>
-              <div className="flex-mob">
-                <label htmlFor="id" className="input_title">
-                  <input className="input-01" type="text" id="id" />
-                </label>
-              </div>
-            </div>
-            <div className="input_container m-t-20">
-              <span className="category">블로그 제목</span>
-              <div className="flex-mob">
-                <label htmlFor="title" className="input_title">
-                  <input className="input-01" type="text" id="title" />
-                </label>
-              </div>
-            </div>
-            <div className="input_container m-t-20">
-              <span className="category">직업?</span>
-              <div className="flex-mob">
-                <label htmlFor="job" className="input_title">
-                  <input className="input-01" type="text" id="job" />
-                </label>
-              </div>
-            </div>
+            ))}
             <div className="input_container m-t-20">
               <span className="category">비밀번호</span>
               <div className="flex-mob">
@@ -139,6 +155,12 @@ export default function page() {
           </div>
         </div>
       </div>
+      {/* {!!user && (
+        <div>
+          <h4>사용자 정보:</h4>
+          <pre>{JSON.stringify(user, null, 2)}</pre>
+        </div>
+      )} */}
     </div>
   );
 }

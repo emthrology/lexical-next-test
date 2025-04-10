@@ -11,7 +11,7 @@ export default function ProfileComponent() {
         </p>
       </div>
       <h2 className="main-title paperlogy m-t-50">
-        {user?.title ?? `${user.nickname}의 블로그`}
+        {user?.title ?? `${user?.nickname}의 블로그`}
       </h2>
       <div className="profile-count-container">
         <div className="profile-box">

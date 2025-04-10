@@ -5,13 +5,15 @@ import { $getSelection, $isRangeSelection, $isTextNode } from 'lexical';
 import {
   INSERT_UNORDERED_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND
+  REMOVE_LIST_COMMAND,
 } from '@lexical/list';
 import { $generateHtmlFromNodes } from '@lexical/html';
 import { $patchStyleText } from '@lexical/selection';
-import { useState } from 'react';
-// 세로 툴바 플러그인
-export function VerticalToolbarPlugin() {
+import usePostStore from '@/store/postStore';
+import { useEffect, useState } from 'react';
+// 세로 툴바 플러그인{
+export function VerticalToolbarPlugin({ onSave }) {
+  const { postTitle, postContent, setPostContent } = usePostStore();
   const [fontWeight, setFontWeight] = useState(null);
   const [fontItalic, setFontItalic] = useState(null);
   const [fontUnderline, setFontUnderline] = useState(null);
@@ -97,7 +99,6 @@ export function VerticalToolbarPlugin() {
     { color: '#C50EB3', className: 'color-10' },
   ];
   const fontBackgroundColors = [
-
     { color: '#FFFFFF', className: 'color-none' },
     { color: '#FFE4E1', className: 'color-a' },
     { color: '#F0FFF0', className: 'color-b' },
@@ -108,50 +109,89 @@ export function VerticalToolbarPlugin() {
     { color: '#8DDE8D', className: 'color-g' },
     { color: '#A0C6FF', className: 'color-h' },
     { color: '#D8BFD8', className: 'color-i' },
-
   ];
   // 그룹화: 한 줄에 5개의 버튼씩 묶음
-  const groupedButtons = (buttons) => buttons.reduce((acc, button, index) => {
-    if (index % 5 === 0) acc.push([]); // 새로운 그룹 생성
-    acc[acc.length - 1].push(button); // 현재 그룹에 버튼 추가
-    return acc;
-  }, []);
+  const groupedButtons = (buttons) =>
+    buttons.reduce((acc, button, index) => {
+      if (index % 5 === 0) acc.push([]); // 새로운 그룹 생성
+      acc[acc.length - 1].push(button); // 현재 그룹에 버튼 추가
+      return acc;
+    }, []);
 
-  const handleSave = () => {
+  const handleSaveButton = () => {
     editor.update(() => {
       const htmlString = $generateHtmlFromNodes(editor, null);
-      console.log('HTML String:', htmlString);
-    })
-  }
+      setPostContent(htmlString); // Zustand 상태 업데이트
+    });
+  };
+
+  useEffect(() => {
+    if (postContent) {
+      onSave(); // postContent가 변경될 때만 실행
+    }
+  }, [postContent]); // 의존성 배열에 postContent 포함
 
   return (
     <div className="right-panel">
       <div className="style-flex-box first-box">
         {/* <FontFamilyPlugin /> */}
-        <select onChange={(e) => handleFontStyleChange('font-family', e.target.value)} className="f-14">
-          <option value="Pretendard" className="pretendard">프리텐다드</option>
-          <option value="Nanum Gothic" className="nanumgothic">나눔고딕</option>
-          <option value="NanumBarunGothic" className="nanumbarungothic">나눔바른고딕</option>
-          <option value="Nanum Myeongjo" className="nanummyeongjo">나눔명조</option>
-          <option value="MaruBuri" className="maruburi">마루부리</option>
+        <select
+          onChange={(e) => handleFontStyleChange('font-family', e.target.value)}
+          className="f-14"
+        >
+          <option value="Pretendard" className="pretendard">
+            프리텐다드
+          </option>
+          <option value="Nanum Gothic" className="nanumgothic">
+            나눔고딕
+          </option>
+          <option value="NanumBarunGothic" className="nanumbarungothic">
+            나눔바른고딕
+          </option>
+          <option value="Nanum Myeongjo" className="nanummyeongjo">
+            나눔명조
+          </option>
+          <option value="MaruBuri" className="maruburi">
+            마루부리
+          </option>
           {/* <option value="Paperlogy">Paperlogy</option> */}
         </select>
-        <select defaultValue="18px" onChange={(e) => handleFontStyleChange('font-size', e.target.value)} className="f-14 w-r">
-          <option className="fs-22" value="22px">22px</option>
-          <option className="fs-20" value="20px">20px</option>
-          <option className="fs-18" value="18px">18px</option>
-          <option className="fs-16" value="16px">16px</option>
+        <select
+          defaultValue="18px"
+          onChange={(e) => handleFontStyleChange('font-size', e.target.value)}
+          className="f-14 w-r"
+        >
+          <option className="fs-22" value="22px">
+            22px
+          </option>
+          <option className="fs-20" value="20px">
+            20px
+          </option>
+          <option className="fs-18" value="18px">
+            18px
+          </option>
+          <option className="fs-16" value="16px">
+            16px
+          </option>
         </select>
       </div>
       <div className="style-flex-box second-box">
-        <button onClick={(e) => handleFontStyleToggle(e, 'font-weight', 'bold')} type="button" className="bold-btn btn-04">
+        <button
+          onClick={(e) => handleFontStyleToggle(e, 'font-weight', 'bold')}
+          type="button"
+          className="bold-btn btn-04"
+        >
           <img
             className="edit-img"
             src="/img/edit/blod-icon.png"
             alt="본문 폰트 굵기 아이콘"
           />
         </button>
-        <button onClick={(e) => handleFontStyleToggle(e, 'font-style', 'italic')} type="button" className="italic-btn btn-04">
+        <button
+          onClick={(e) => handleFontStyleToggle(e, 'font-style', 'italic')}
+          type="button"
+          className="italic-btn btn-04"
+        >
           <img
             className="edit-img"
             src="/img/edit/italic-icon.png"
@@ -161,7 +201,9 @@ export function VerticalToolbarPlugin() {
       </div>
       <div className="style-flex-box third-box">
         <button
-          onClick={(e) => handleFontStyleToggle(e, 'text-decoration', 'underline')}
+          onClick={(e) =>
+            handleFontStyleToggle(e, 'text-decoration', 'underline')
+          }
           type="button"
           className="underline-btn btn-04"
         >
@@ -172,7 +214,9 @@ export function VerticalToolbarPlugin() {
           />
         </button>
         <button
-          onClick={(e) => handleFontStyleToggle(e, 'text-decoration', 'line-through')}
+          onClick={(e) =>
+            handleFontStyleToggle(e, 'text-decoration', 'line-through')
+          }
           type="button"
           className="strike-btn btn-04"
         >
@@ -197,7 +241,10 @@ export function VerticalToolbarPlugin() {
           />
         </button>
         {/* font-color */}
-        <div className="style-pop" style={{ display: `${activeBox == 'color' ? 'block' : 'none'}` }}>
+        <div
+          className="style-pop"
+          style={{ display: `${activeBox == 'color' ? 'block' : 'none'}` }}
+        >
           <ul className="array-box flex-direc">
             {groupedButtons(fontColors).map((colors, groupIndex) => (
               <div key={groupIndex} className="g-15 flex">
@@ -228,21 +275,31 @@ export function VerticalToolbarPlugin() {
           />
         </button>
         {/* font-background-color */}
-        <div className="style-pop" style={{ display: `${activeBox == 'background' ? 'block' : 'none'}` }}>
+        <div
+          className="style-pop"
+          style={{ display: `${activeBox == 'background' ? 'block' : 'none'}` }}
+        >
           <ul className="array-box flex-direc">
             {groupedButtons(fontBackgroundColors).map((colors, groupIndex) => (
               <div key={groupIndex} className="g-15 flex">
                 {colors.map((item, itemIndex) => (
                   <button
                     key={item.className}
-                    onClick={() => handleFontStyleChange('background', item.color)}
+                    onClick={() =>
+                      handleFontStyleChange('background', item.color)
+                    }
                     type="button"
                     className="pop-list"
                   >
-                    {groupIndex == 0 && itemIndex == 0
-                      ? <img className="array-img-20" src="/img/edit/bg-none.png" alt="배경없음 아이콘" />
-                      : <div className={`circle-color ${item.className}`}></div>
-                    }
+                    {groupIndex == 0 && itemIndex == 0 ? (
+                      <img
+                        className="array-img-20"
+                        src="/img/edit/bg-none.png"
+                        alt="배경없음 아이콘"
+                      />
+                    ) : (
+                      <div className={`circle-color ${item.className}`}></div>
+                    )}
                   </button>
                 ))}
               </div>
@@ -251,31 +308,105 @@ export function VerticalToolbarPlugin() {
         </div>
       </div>
       <div className="style-flex-box five-box">
-        <button type="button"
+        <button
+          type="button"
           onClick={() => toggleBox('align')}
-          className="array-btn btn-04">
-          <img className="edit-img" src="/img/edit/array-icon.png" alt="정렬 아이콘" />
+          className="array-btn btn-04"
+        >
+          <img
+            className="edit-img"
+            src="/img/edit/array-icon.png"
+            alt="정렬 아이콘"
+          />
         </button>
         {/* align */}
-        <div className="style-pop" style={{ display: `${activeBox == 'align' ? 'block' : 'none'}` }}>
+        <div
+          className="style-pop"
+          style={{ display: `${activeBox == 'align' ? 'block' : 'none'}` }}
+        >
           <ul className="array-box">
-            <button type="button" onClick={() => applyAlignment('left')} className="pop-list"><img className="array-img" src="/img/edit/array-left.png" alt="왼쪽 정렬 아이콘" /></button>
-            <button type="button" onClick={() => applyAlignment('center')} className="pop-list"><img className="array-img" src="/img/edit/array-center.png" alt="가운데 정렬 아이콘" /></button>
-            <button type="button" onClick={() => applyAlignment('right')} className="pop-list"><img className="array-img" src="/img/edit/array-right.png" alt="오른쪽 정렬 아이콘" /></button>
+            <button
+              type="button"
+              onClick={() => applyAlignment('left')}
+              className="pop-list"
+            >
+              <img
+                className="array-img"
+                src="/img/edit/array-left.png"
+                alt="왼쪽 정렬 아이콘"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => applyAlignment('center')}
+              className="pop-list"
+            >
+              <img
+                className="array-img"
+                src="/img/edit/array-center.png"
+                alt="가운데 정렬 아이콘"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => applyAlignment('right')}
+              className="pop-list"
+            >
+              <img
+                className="array-img"
+                src="/img/edit/array-right.png"
+                alt="오른쪽 정렬 아이콘"
+              />
+            </button>
           </ul>
         </div>
-        <button type="button"
+        <button
+          type="button"
           onClick={() => toggleBox('listStyle')}
-          className="index-btn btn-04">
-          <img className="edit-img" src="/img/edit/index-icon.png" alt="리스트 스타일 아이콘" />
+          className="index-btn btn-04"
+        >
+          <img
+            className="edit-img"
+            src="/img/edit/index-icon.png"
+            alt="리스트 스타일 아이콘"
+          />
         </button>
         {/* list-style */}
-        <div className="style-pop" style={{ display: `${activeBox == 'listStyle' ? 'block' : 'none'}` }}>
+        <div
+          className="style-pop"
+          style={{ display: `${activeBox == 'listStyle' ? 'block' : 'none'}` }}
+        >
           <div className="style-pop">
             <ul className="array-box left-position">
-              <button type="button" onClick={insertUnorderedList} className="pop-list"><img className="array-img" src="/img/edit/list-dot.png" alt="왼쪽 정렬 아이콘" /></button>
-              <button type="button" onClick={insertOrderedList} className="pop-list"><img className="array-img" src="/img/edit/list-num.png" alt="가운데 정렬 아이콘" /></button>
-              <button type="button" onClick={removeList} className="pop-list"><img className="array-img" src="/img/edit/list-none.png" alt="오른쪽 정렬 아이콘" /></button>
+              <button
+                type="button"
+                onClick={insertUnorderedList}
+                className="pop-list"
+              >
+                <img
+                  className="array-img"
+                  src="/img/edit/list-dot.png"
+                  alt="왼쪽 정렬 아이콘"
+                />
+              </button>
+              <button
+                type="button"
+                onClick={insertOrderedList}
+                className="pop-list"
+              >
+                <img
+                  className="array-img"
+                  src="/img/edit/list-num.png"
+                  alt="가운데 정렬 아이콘"
+                />
+              </button>
+              <button type="button" onClick={removeList} className="pop-list">
+                <img
+                  className="array-img"
+                  src="/img/edit/list-none.png"
+                  alt="오른쪽 정렬 아이콘"
+                />
+              </button>
             </ul>
           </div>
         </div>
@@ -289,7 +420,9 @@ export function VerticalToolbarPlugin() {
         </button>
       </div>
       <div className="style-flex-box last-box m-t-20">
-        <button onClick={handleSave} className="complete user-btn">완료</button>
+        <button onClick={handleSaveButton} className="complete user-btn">
+          완료
+        </button>
       </div>
     </div>
   );

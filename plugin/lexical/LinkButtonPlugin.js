@@ -19,7 +19,10 @@ export default function LinkButtonPlugin() {
   const addLink = (text, url) => {
     editor.update(() => {
       const root = $getRoot(); // 에디터의 루트 노드 가져오기
-      const linkNode = $createLinkNode(url); // 새 링크 노드 생성
+      const linkNode = $createLinkNode(url, {
+        rel: 'noopener noreferrer',
+        target: '_blank',
+      }); // 새 링크 노드 생성
       const textNode = $createTextNode(text); // 새 텍스트 노드 생성
       linkNode.append(textNode); // 텍스트를 링크에 추가
       root.append(linkNode); // 링크를 루트에 추가
