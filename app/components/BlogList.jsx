@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 
 export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   const [listStack, setListStack] = useState([]);
@@ -65,25 +64,15 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   return (
     <>
       {listStack.map((post, index) => (
-        <a
-          href={post.path}
-          key={index}
-          className="photo-box"
-          style={{ width: 'calc(25% - 15px', height: '228px' }}
-        >
-          <Image
-            src={post.image}
-            alt={post.alt}
-            sizes="(max-width: calc(25% - 15px)) 100vw, (max-width: 228px) 50vw, 33vw"
-            priority={false}
-            width={300}
-            height={228}
-          />
-          <div className="text-box">
-            <h3 className="post-title">{post.title}</h3>
-            <p className="post-date">{post.date}</p>
-          </div>
-        </a>
+        <div key={index} className="photo-box">
+          <a href={post.path}>
+            <img src={post.image} alt={post.alt} />
+            <div className="text-box">
+              <h3 className="post-title">{post.title}</h3>
+              <p className="post-date">{post.date}</p>
+            </div>
+          </a>
+        </div>
       ))}
     </>
   );
