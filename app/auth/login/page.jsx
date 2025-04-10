@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import useUserStore from '@/store/userStore';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 export default function page() {
   const { setUser } = useUserStore();
   const router = useRouter();
@@ -94,19 +95,19 @@ export default function page() {
 
           <ul className="user-account">
             <li className="user-item">
-              <a href="/auth/register" className="user-link">
+              <Link href="/auth/register" className="user-link">
                 회원가입
-              </a>
+              </Link>
             </li>
             <li className="user-item">
-              <a href="/auth/login/find" className="user-link">
+              <Link href="/auth/login/find" className="user-link">
                 아이디 찾기
-              </a>
+              </Link>
             </li>
             <li className="user-item">
-              <a href="/auth/login/find" className="user-link">
+              <Link href="/auth/login/find" className="user-link">
                 비밀번호 찾기
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

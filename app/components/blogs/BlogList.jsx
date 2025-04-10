@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   const [listStack, setListStack] = useState([]);
@@ -74,7 +75,7 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
         //     </div>
         //   </a>
         // </div>
-        <a href={post.path} key={index} className="best-item">
+        <Link href={post.path} key={index} className="best-item">
           <div className="thumbnail" style={{ width: '140px', height: '95px' }}>
             <Image
               src={post.image}
@@ -89,7 +90,7 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
             <p className="title">{post.title}</p>
             <p className="date">{post.date}</p>
           </div>
-        </a>
+        </Link>
       ))}
     </>
   );

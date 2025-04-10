@@ -12,8 +12,6 @@ export default function page({ params }) {
   const [blogData, setBlogData] = useState(null);
   const [toggleReport, setToggleReport] = useState(0);
   const [toggleDelete, setToggleDelete] = useState(0);
-  const [trendPage, setTrendPage] = useState(1);
-  const [postPage, setPostPage] = useState(1);
   useEffect(() => {
     // TODO api 에서 값 받아서 각 컴포넌트에 전달
     const fetchData = async () => {
@@ -94,7 +92,7 @@ export default function page({ params }) {
                   {/* 안에 editor 결과물 넣기 */}
                 </div>
               </div>
-              {/* buttons */}
+              {/* keywords */}
               <div className="btn-container m-t-50">
                 <div className="keyword-list">
                   <div className="keyword-btn btn-03 radius-20">전국 카페</div>
@@ -193,13 +191,13 @@ export default function page({ params }) {
               {/* 인기글 */}
               <div className="best-list">
                 <h2 className="sidebar-title">BEST3</h2>
-                <BlogList type="trend" page={trendPage} />
+                <BlogList type="trend" page={1} />
               </div>
 
               {/* 최신글 */}
               <div className="latest-list m-t-90">
                 <h2 className="sidebar-title">최신글</h2>
-                <BlogList type="post" page={postPage} />
+                <BlogList type="post" page={1} />
               </div>
             </div>
           </div>
