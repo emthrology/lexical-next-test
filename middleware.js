@@ -40,7 +40,9 @@ export function middleware(request) {
 
   // 토큰이 없으면 로그인 페이지로 리다이렉트
   if (!token) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    const redirectUrl = new URL('/auth/login', request.url);
+    redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
 

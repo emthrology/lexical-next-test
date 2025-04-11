@@ -5,12 +5,16 @@ import Cookies from 'js-cookie';
 export default function page() {
   // TODO 내정보에 내 댓글, 내 포스트?(Blog List 메뉴로 갈수도 있음)
   const [formData, setFormData] = useState(null);
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const inputFields = [
-    { label: '닉네임', id: 'nickname', key: 'nickname', type: 'text' },
-    { label: '아이디', id: 'id', key: 'id', type: 'text' },
     { label: '블로그 제목', id: 'title', key: 'title', type: 'text' },
+    {
+      label: '프로필 한마디',
+      id: 'description',
+      key: 'description',
+      type: 'text',
+    },
     { label: '직업?', id: 'job', key: 'job', type: 'text' },
   ];
   const uploadAndInsertImage = async (e) => {
@@ -55,8 +59,8 @@ export default function page() {
     if (user) {
       setFormData({
         nickname: user.nickname || '',
-        id: user.id || '',
         title: user.title || '',
+        description: user.description || '',
         job: user.job || '',
         pw: '',
       });
@@ -76,7 +80,11 @@ export default function page() {
           </span>
           <div className="profile">
             <div className="my_img">
-              <img src={user?.my_profile_photo} alt="내 프로필 이미지" />
+              <img
+                src={user?.my_profile_photo}
+                alt="내 프로필 이미지"
+                style={{ aspectRatio: '1/1', objectFit: 'cover' }}
+              />
             </div>
             <div className="editBtn">
               <label

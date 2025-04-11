@@ -1,20 +1,21 @@
 'use client';
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
+import { fetchData } from '@/lib/api';
 import Cookies from 'js-cookie';
 import useUserStore from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-export default function page() {
+export default function page({ searchParams }) {
   const { setUser } = useUserStore();
   const router = useRouter();
+  // const { redirectedFrom } = router.query;
+  const { redirectedFrom } = use(searchParams);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const handleLogin = async () => {
     try {
-      // await getCsrfToken(); // Uncomment if you need CSRF protection
-      const response = await fetch(`${apiUrl}/login`, {
+      const data = await fetchData('login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,19 +24,29 @@ export default function page() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const userData = await response.json();
+      const userData = data.user;
       const token = userData.token;
       Cookies.set('authToken_blog', token, { expires: 7 }); // 쿠키 만료 기간: 7일
+      setUser(userData.user);
+      router.push(redirectedFrom || '/'); // 기본값으로 홈 경로 설정
+      // const response = await fetch(`${apiUrl}/login`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Accept: 'application/json',
+      //   },
+      //   body: JSON.stringify({ email, password }),
+      // });
+      // const userData = await response.json();
+      // const token = userData.token;
+      // Cookies.set('authToken_blog', token, { expires: 7 }); // 쿠키 만료 기간: 7일
       // Set the token in a cookie
       // document.cookie = `authToken=${token}; path=/; secure; samesite=strict; max-age=86400`; // Expires in 1 day (86400 seconds)
-
-      setUser(userData.user);
-      router.push('/'); // Redirect to the home page after login
+      // setUser(userData.user);
+      // router.push('/'); // Redirect to the home page after login
+      // router.push(redirectedFrom || '/'); // 기본값으로 홈 경로 설정
     } catch (error) {
+      alert('로그인 실패:', error);
       console.error('Login error:', error);
     }
   };

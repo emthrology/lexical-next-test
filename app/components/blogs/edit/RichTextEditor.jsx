@@ -1,5 +1,7 @@
 'use client';
+import { fetchData } from '@/lib/api';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -42,7 +44,7 @@ const editorConfig = {
 };
 
 export default function RichTextEditor() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
   const { postContent, postTitle, setPostTitle } = usePostStore();
   const [titleColorBoxFlag, setTitleColorBoxFlag] = useState(false);
   const [titleColor, setTitleColor] = useState('#FDCC32');
@@ -90,24 +92,36 @@ export default function RichTextEditor() {
     formData.append('category', '36');
     formData.append('content', postContent);
     formData.append('public', '1');
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
     try {
       const token = Cookies.get('authToken_blog');
-      console.log(apiUrl, 333);
-      const response = await fetch(`${apiUrl}/blogs`, {
+      const data = await fetchData('blogs', {
         method: 'POST',
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.ok) {
-        const { data } = await response.json();
-        console.log('저장된 데이터:', data);
+      if (data.success) {
+        // console.log('저장된 데이터:', data);
         alert('저장되었습니다.');
+        router.push('/');
       }
+
+      // const response = await fetch(`${apiUrl}/blogs`, {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+      // if (response.ok) {
+      //   const { data } = await response.json();
+      //   console.log('저장된 데이터:', data);
+      //   alert('저장되었습니다.');
+      // }
     } catch (error) {
       alert('저장 중 오류가 발생했습니다.');
       console.error('Error saving data:', error);

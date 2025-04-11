@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { fetchData } from '@/lib/api';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,9 +8,6 @@ import Link from 'next/link';
 export default function BlogList({ type = 'trend' }) {
   const [list, setlist] = useState([]);
   const [isFetched, setIsFetched] = useState(false); // 상태 추가
-  // const apiUrl = 'https://api.pastorjun.com/api';
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
   // 설명 텍스트 포맷 함수
   const getDescription = (description) => {
     return description?.replace(/\n/g, ' ') || '';
@@ -20,10 +18,11 @@ export default function BlogList({ type = 'trend' }) {
 
   useEffect(() => {
     if (isFetched) return; // 이미 데이터를 가져왔으면 실행하지 않음
-    const fetchData = async () => {
+    const fetchList = async () => {
       try {
-        const response = await fetch(`${apiUrl}/blog-${type}?page=1`);
-        const result = await response.json();
+        const result = await fetchData(`blog-${type}?page=1`);
+        // const response = await fetch(`${apiUrl}/blog-${type}?page=1`);
+        // const result = await response.json();
         const data = result[type]?.data.reverse() || [];
         const newItems = data
           .map((post) => ({
@@ -47,7 +46,7 @@ export default function BlogList({ type = 'trend' }) {
       }
     };
 
-    fetchData();
+    fetchList();
   }, []);
 
   return (

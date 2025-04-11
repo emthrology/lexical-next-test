@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { fetchData } from '@/lib/api';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 
@@ -9,12 +10,13 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   const [isFetching, setIsFetching] = useState(false);
   const router = useRouter();
   // const apiUrl = 'https://api.pastorjun.com/api';
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   // 데이터 가져오기 함수
-  const fetchData = async (page) => {
+  const fetchList = async (page) => {
     try {
-      const response = await fetch(`${apiUrl}/blog-${type}?page=${page}`);
-      const result = await response.json();
+      const result = await fetchData(`blog-${type}?page=${page}`);
+
+      // const response = await fetch(`${apiUrl}/blog-${type}?page=${page}`);
+      // const result = await response.json();
       return result[type]?.data || [];
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -51,7 +53,7 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
 
     const fetchAndAddData = async () => {
       setIsFetching(true);
-      const data = await fetchData(page);
+      const data = await fetchList(page);
       if (data.length > 0) {
         addList(data);
       } else if (onLastPage) {

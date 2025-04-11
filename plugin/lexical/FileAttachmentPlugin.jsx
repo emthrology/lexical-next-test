@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { fetchData } from '@/lib/api';
 import Cookies from 'js-cookie';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getRoot } from 'lexical';
@@ -6,7 +7,6 @@ import { $createFileNode } from './FileNode';
 
 const FileAttachmentPlugin = () => {
   const [editor] = useLexicalComposerContext();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   // ▼▼▼ 파일 업로드 핸들러 ▼▼▼
   const handleFileUpload = useCallback(
     (url, file) => {
@@ -36,39 +36,60 @@ const FileAttachmentPlugin = () => {
   const handleClick = useCallback(
     async (e) => {
       e.preventDefault();
-      console.log(e, 333);
-      const file = e.target.files[0];
+      const file = e.target.files[0]; //switch to multiple here
       if (file) {
         const formData = new FormData();
         formData.append('image', file);
-        try {
-          const token = Cookies.get('authToken_blog');
-          console.log(apiUrl, 'file upload');
-          // TODO 파일 업로드 api URL
-          const response = await fetch(`${apiUrl}/store-blog-image`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              Authorization: `Bearer ${token}`,
-              // 'ContentType': 'multipart/form-data' // 이 헤더가 수동으로 설정되면 브라우저에서 경계값 을 설정하지 않으므로 주석 처리
-            },
-          });
-          if (response.ok) {
-            const { data } = await response.json();
-            handleFileUpload(data.original_url, file);
-          } else {
-            alert('파일 업로드에 실패했습니다.');
-            console.log('Error uploading image:', response.statusText);
-          }
-        } catch (error) {
-          alert('파일 업로드 중 오류가 발생했습니다.');
-          console.log('Error uploading image:', error);
-        }
+        const token = Cookies.get('authToken_blog');
+        // 주의: 아래 data는 data.data 이다
+        const { data } = await fetchData('store-blog-image', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        handleFileUpload(data.original_url, file);
       }
-      // if (files.length > 0) handleFileUpload(files);
     },
     [handleFileUpload]
   );
+
+  // const handleClick = useCallback(
+  //   async (e) => {
+  //     e.preventDefault();
+  //     console.log(e, 333);
+  //     const file = e.target.files[0];
+  //     if (file) {
+  //       const formData = new FormData();
+  //       formData.append('image', file);
+  //       try {
+  //         const token = Cookies.get('authToken_blog');
+  //         console.log(apiUrl, 'file upload');
+  //         const response = await fetch(`${apiUrl}/store-blog-image`, {
+  //           method: 'POST',
+  //           body: formData,
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //             // 'ContentType': 'multipart/form-data' // 이 헤더가 수동으로 설정되면 브라우저에서 경계값 을 설정하지 않으므로 주석 처리
+  //           },
+  //         });
+  //         if (response.ok) {
+  //           const { data } = await response.json();
+  //           handleFileUpload(data.original_url, file);
+  //         } else {
+  //           alert('파일 업로드에 실패했습니다.');
+  //           console.log('Error uploading image:', response.statusText);
+  //         }
+  //       } catch (error) {
+  //         alert('파일 업로드 중 오류가 발생했습니다.');
+  //         console.log('Error uploading image:', error);
+  //       }
+  //     }
+  //     // if (files.length > 0) handleFileUpload(files);
+  //   },
+  //   [handleFileUpload]
+  // );
 
   return (
     <label
