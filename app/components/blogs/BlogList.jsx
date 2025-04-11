@@ -4,38 +4,11 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
-  const [listStack, setListStack] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-
+export default function BlogList({ type = 'trend' }) {
+  const [list, setlist] = useState([]);
+  const [isFetched, setIsFetched] = useState(false); // 상태 추가
   // const apiUrl = 'https://api.pastorjun.com/api';
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  // 데이터 가져오기 함수
-  const fetchData = async (page) => {
-    try {
-      const response = await fetch(`${apiUrl}/blog-${type}?page=${page}`);
-      const result = await response.json();
-      return result[type]?.data.reverse() || [];
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return [];
-    }
-  };
-
-  // 데이터 추가 함수
-  const addList = (data) => {
-    const newItems = data.map((post) => ({
-      path: `/blogs/${post.id}`,
-      title: post.title || 'no-title available',
-      description:
-        getDescription(post.description) || 'no-description available',
-      image: getPostImage(post.blog_photo) || '/not-found.jpg',
-      alt: post.alt || 'no alter data available',
-      ogImage: post.blog_photo || '/not-found.jpg',
-      date: dayjs(post.created_at).format('YYYY-MM-DD') || 'not-date-available',
-    }));
-    setListStack((prevList) => [...prevList, ...newItems]);
-  };
 
   // 설명 텍스트 포맷 함수
   const getDescription = (description) => {
@@ -45,27 +18,41 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
     return image ?? '/img/fallback.png';
   };
 
-  // 페이지 변경 시 데이터 가져오기
   useEffect(() => {
-    if (isFetching) return;
-
-    const fetchAndAddData = async () => {
-      setIsFetching(true);
-      const data = await fetchData(page);
-      if (data.length > 0) {
-        addList(data);
-      } else if (onLastPage) {
-        onLastPage();
+    if (isFetched) return; // 이미 데이터를 가져왔으면 실행하지 않음
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/blog-${type}?page=1`);
+        const result = await response.json();
+        const data = result[type]?.data.reverse() || [];
+        const newItems = data
+          .map((post) => ({
+            path: `/blogs/${post.id}`,
+            title: post.title || 'no-title available',
+            description:
+              getDescription(post.description) || 'no-description available',
+            image: getPostImage(post.blog_photo) || '/not-found.jpg',
+            alt: post.alt || 'no alter data available',
+            ogImage: post.blog_photo || '/not-found.jpg',
+            date:
+              dayjs(post.created_at).format('YYYY-MM-DD') ||
+              'not-date-available',
+          }))
+          .slice(0, type == 'trend' ? 3 : 5);
+        setlist([...newItems]);
+        setIsFetched(true); // 상태 업데이트
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
       }
-      setIsFetching(false);
     };
 
-    fetchAndAddData();
-  }, [page]); // 페이지가 변경될 때마다 실행
+    fetchData();
+  }, []);
 
   return (
     <>
-      {listStack.map((post, index) => (
+      {list.map((post, index) => (
         // <div key={index} className="photo-box">
         //   <a href={post.path}>
         //     <img src={post.image} alt={post.alt} />
