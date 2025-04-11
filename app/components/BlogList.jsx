@@ -1,11 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 
 export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   const [listStack, setListStack] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-
+  const router = useRouter();
   // const apiUrl = 'https://api.pastorjun.com/api';
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   // 데이터 가져오기 함수
@@ -64,14 +66,22 @@ export default function BlogList({ type = 'trend', page = 0, onLastPage }) {
   return (
     <>
       {listStack.map((post, index) => (
-        <div key={index} className="photo-box">
-          <a href={post.path}>
-            <img src={post.image} alt={post.alt} />
-            <div className="text-box">
-              <h3 className="post-title">{post.title}</h3>
-              <p className="post-date">{post.date}</p>
-            </div>
-          </a>
+        <div
+          key={index}
+          className="photo-box"
+          onClick={() => router.push(post.path)}
+        >
+          {/* <img src={post.image} alt={post.alt} /> */}
+          <Image
+            src={post.image}
+            alt={post.alt}
+            fill
+            sizes="(max-width: 767px) clamp(150px, calc((100% - 20px) / 2), 300px), (max-width: 480px) 50vw, calc((100% - 60px) / 4)"
+          />
+          <div className="text-box">
+            <h3 className="post-title">{post.title}</h3>
+            <p className="post-date">{post.date}</p>
+          </div>
         </div>
       ))}
     </>
