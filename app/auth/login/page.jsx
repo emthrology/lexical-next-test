@@ -23,11 +23,11 @@ export default function page({ searchParams }) {
         },
         body: JSON.stringify({ email, password }),
       });
-
-      const userData = data.user;
-      const token = userData.token;
+      const { user, token } = data;
+      // const userData = data.user;
+      // const token = data.token;
       Cookies.set('authToken_blog', token, { expires: 7 }); // 쿠키 만료 기간: 7일
-      setUser(userData.user);
+      setUser(user);
       router.push(redirectedFrom || '/'); // 기본값으로 홈 경로 설정
       // const response = await fetch(`${apiUrl}/login`, {
       //   method: 'POST',
