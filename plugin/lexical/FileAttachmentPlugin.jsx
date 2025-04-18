@@ -2,9 +2,9 @@ import React, { useCallback } from 'react';
 import { fetchData } from '@/lib/api';
 import Cookies from 'js-cookie';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getRoot } from 'lexical';
+import { $getRoot, $createParagraphNode } from 'lexical';
 import { $createFileNode } from './FileNode';
-
+import { $createStyleTextNode } from './InlineStyleTextNode';
 const FileAttachmentPlugin = () => {
   const [editor] = useLexicalComposerContext();
   // ▼▼▼ 파일 업로드 핸들러 ▼▼▼
@@ -20,9 +20,14 @@ const FileAttachmentPlugin = () => {
             size: file.size,
             type: file.type,
           });
-          // $insertNodes([fileNode]);
           const root = $getRoot();
           root.append(fileNode);
+
+          // 2. 바로 뒤에 InlineStyleTextNode 삽입
+          const paragraphNode = $createParagraphNode();
+          const inlineNode = $createStyleTextNode(' ', ''); // 빈 텍스트로 생성이 안되어 스페이스, 스타일
+          paragraphNode.append(inlineNode);
+          root.append(paragraphNode);
         });
       };
       reader.readAsArrayBuffer(file);

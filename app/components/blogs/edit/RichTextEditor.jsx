@@ -13,13 +13,18 @@ import { YoutubePlugin } from '@/plugin/lexical/YoutubePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { ListNode, ListItemNode } from '@lexical/list';
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { TextNode } from 'lexical';
 import { LinkNode } from '@lexical/link';
+import { StyledLinkNode } from '@/plugin/lexical/StyledLinkNode';
 import { ImagePlugin } from '@/plugin/lexical/ImagePlugin';
 import { FileNode } from '@/plugin/lexical/FileNode';
-import { useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
+
 import usePostStore from '@/store/postStore';
 import LinkButtonPlugin from '@/plugin/lexical/LinkButtonPlugin';
 import FileAttachmentPlugin from '@/plugin/lexical/FileAttachmentPlugin';
+import { SetInitialValuePlugin } from '@/plugin/lexical/SetInitialValutPlugin';
+import { InlineStyleTextNode } from '@/plugin/lexical/InlineStyleTextNode';
 const editorConfig = {
   namespace: 'MyEditor',
   theme: {
@@ -40,10 +45,40 @@ const editorConfig = {
   onError(error) {
     console.error('Lexical Error:', error);
   },
-  nodes: [ImageNode, ListNode, ListItemNode, LinkNode, YoutubeNode, FileNode],
+  nodes: [
+    ImageNode,
+    ListNode,
+    ListItemNode,
+    StyledLinkNode,
+    {
+      replace: LinkNode,
+      with: (node) =>
+        new StyledLinkNode(node.__url, {
+          target: node.__target,
+          rel: node.__rel,
+          style: node.__style,
+        }),
+    },
+    InlineStyleTextNode,
+    {
+      replace: TextNode,
+      with: (node) => new InlineStyleTextNode(node.__text, node.__style),
+    },
+    YoutubeNode,
+    FileNode,
+  ],
 };
 
-export default function RichTextEditor() {
+export default function RichTextEditor({ editData }) {
+  // const editdata = editData;
+  useLayoutEffect(() => {
+    if (editData?.title) {
+      setPostTitle(editData?.title);
+    } else {
+      setPostTitle('');
+    }
+  }, [editData?.content]);
+
   const router = useRouter();
   const { postContent, postTitle, setPostTitle } = usePostStore();
   const [titleColorBoxFlag, setTitleColorBoxFlag] = useState(false);
@@ -129,6 +164,8 @@ export default function RichTextEditor() {
   };
   return (
     <LexicalComposer initialConfig={editorConfig}>
+      {/* 초기값 세팅 플러그인은 여기! */}
+      <SetInitialValuePlugin initHtml={editData?.content || ''} />
       <div id="main">
         <div className="edit m-t-40">
           <div className="container">

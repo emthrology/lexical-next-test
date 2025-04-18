@@ -10,7 +10,7 @@ import {
 import { $generateHtmlFromNodes } from '@lexical/html';
 import { $patchStyleText } from '@lexical/selection';
 import usePostStore from '@/store/postStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 // 세로 툴바 플러그인{
 export function VerticalToolbarPlugin({ onSave }) {
   const { postTitle, postContent, setPostContent } = usePostStore();
@@ -124,12 +124,12 @@ export function VerticalToolbarPlugin({ onSave }) {
       setPostContent(htmlString); // Zustand 상태 업데이트
     });
   };
-
   useEffect(() => {
-    if (postContent) {
-      onSave(); // postContent가 변경될 때만 실행
+    if (usePostStore.getState().isPostContentUpdated) {
+      onSave();
+      usePostStore.getState().resetUpdateFlag();
     }
-  }, [postContent]); // 의존성 배열에 postContent 포함
+  }, [usePostStore.getState().postContent]);
 
   return (
     <div className="right-panel">

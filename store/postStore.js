@@ -3,6 +3,8 @@ import { devtools } from 'zustand/middleware';
 
 const usePostStore = create(
   devtools((set) => ({
+    isPostContentUpdated: false,
+    resetUpdateFlag: () => set({ isPostContentUpdated: false }),
     postId: '',
     setPostId: (postId) => set({ postId }),
     clearPostId: () => set({ postId: '' }),
@@ -12,7 +14,7 @@ const usePostStore = create(
     clearPostTitle: () => set({ postTitle: '' }),
 
     postContent: '',
-    setPostContent: (postContent) => set({ postContent }),
+    setPostContent: (postContent) => set({ postContent, isPostContentUpdated: true }),
     clearPostContent: () => set({ postContent: '' }),
 
     postType: 'free',

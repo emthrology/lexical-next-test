@@ -1,17 +1,22 @@
 'use client';
 import Cookies from 'js-cookie';
 import React, { use, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import useUserStore from '@/store/userStore';
 import Reply from '@/app/components/blogs/Reply';
 import DotbtnModals from '@/app/components/blogs/DotbtnModals';
 import BlogList from '@/app/components/blogs/BlogList';
 
 export default function page({ params }) {
+  const router = useRouter();
+  const { user } = useUserStore();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { id } = use(params);
   const blogId = id[0];
   const [blogData, setBlogData] = useState(null);
   const [toggleReport, setToggleReport] = useState(0);
   const [toggleDelete, setToggleDelete] = useState(0);
+  const [toggleDotMenu, setToggleDotMenu] = useState(false);
   useEffect(() => {
     // TODO api 에서 값 받아서 각 컴포넌트에 전달
     const fetchData = async () => {
@@ -27,6 +32,22 @@ export default function page({ params }) {
     };
     fetchData();
   }, []);
+
+  const [isAuthor, setIsAuthor] = useState(false);
+  useEffect(() => {
+    if (user) {
+      setIsAuthor(user.id == 4);
+    }
+  }, [user]);
+
+  const handleOnEdit = () => {
+    router.push(`/blogs/edit?blogId=${blogId ?? ''}`);
+    setToggleDotMenu(false);
+  };
+  const handleOnDelete = (commentId) => {
+    // TODO 삭제하기
+    setToggleDotMenu(false);
+  };
 
   // 댓글 데이터를 상태로 관리
   // TODO delete dummy
@@ -78,10 +99,68 @@ export default function page({ params }) {
         <div className="detail m-t-100">
           <div className="container">
             <div className="detail-content">
-              <div className="post-title yellow">{blogData?.data.title}</div>
+              <div className="post-title yellow">
+                {blogData?.data.title}
+                {/* <button
+                  className="more border-ef"
+                  onClick={() => setToggleDotMenu(!toggleDotMenu)}
+                >
+                  <img
+                    src="/img/detail/more.png"
+                    alt="더보기 아이콘"
+                    className="more-icon iconW-24"
+                  />
+                </button>
+                <div className={`more-menu ${toggleDotMenu ? 'visible' : ''}`}>
+                  <button
+                    className="report"
+                    onClick={() => handleOnEdit(blogData?.data.id)}
+                  >
+                    수정하기
+                  </button>
+                  {isAuthor && (
+                    <button
+                      className="del"
+                      onClick={() => handleOnDelete(blogData?.data.id)}
+                    >
+                      삭제하기
+                    </button>
+                  )}
+                </div> */}
+              </div>
               <div className="post-meta m-t-60">
-                <span className="writer">맛거리(response.data.author)</span>
-                <span className="date">{blogData?.data.created_at}</span>
+                <div>
+                  <span className="writer">맛거리(response.data.author)</span>
+                  <span className="date">{blogData?.data.created_at}</span>
+                </div>
+
+                {/* TODO 글쓴이만 수정삭제버튼이 보여야함, 즉 blog detail api 에 userId 가 있어야 대조 가능함 */}
+                <div className="edit-btn-box">
+                  <button
+                    className="share edit-btn"
+                    type="button"
+                    onClick={() => handleOnEdit(blogData?.data.id)}
+                  >
+                    <img
+                      className="iconW-24"
+                      src="/img/detail/edit.png"
+                      alt="수정 아이콘"
+                    />
+                    <span className="edit-txt">수정</span>
+                  </button>
+                  <button
+                    className="share edit-btn"
+                    type="button"
+                    onClick={() => handleOnDelete(blogData?.data.id)}
+                  >
+                    <img
+                      className="iconW-24"
+                      src="/img/detail/trash.png"
+                      alt="삭제 아이콘"
+                    />
+                    <span className="edit-txt">삭제</span>
+                  </button>
+                </div>
               </div>
 
               <div className="post-body m-y-60">

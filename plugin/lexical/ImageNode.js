@@ -38,17 +38,30 @@ export class ImageNode extends DecoratorNode {
     element.setAttribute('alt', this.__alt);
     return { element };
   }
-  importDOM() {
-    // DOM 요소를 Lexical 노드로 변환하는 메서드
+  // importDOM() {
+  //   // DOM 요소를 Lexical 노드로 변환하는 메서드
+  //   return {
+  //     img: (node) => {
+  //       const src = node.getAttribute('src');
+  //       const alt = node.getAttribute('alt');
+  //       return {
+  //         node: new ImageNode(src, alt),
+  //         leave: true,
+  //       };
+  //     },
+  //   };
+  // }
+  static importDOM() {
     return {
-      img: (node) => {
-        const src = node.getAttribute('src');
-        const alt = node.getAttribute('alt');
-        return {
-          node: new ImageNode(src, alt),
-          leave: true,
-        };
-      },
+      img: (node) => ({
+        conversion: (domNode) => {
+          const img = domNode;
+          return {
+            node: new ImageNode(img.src, img.alt),
+          };
+        },
+        priority: 1, // 변환 우선순위
+      }),
     };
   }
 

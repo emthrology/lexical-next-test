@@ -20,6 +20,7 @@ export default function BlogList({ type = 'trend' }) {
     if (isFetched) return; // 이미 데이터를 가져왔으면 실행하지 않음
     const fetchList = async () => {
       try {
+        // TODO 문제점: pages가 이미 asc 구조라서 페이지 내에서 desc 해보았자 최신데이터를 가져올 수 없음
         const result = await fetchData(`blog-${type}?page=1`);
         // const response = await fetch(`${apiUrl}/blog-${type}?page=1`);
         // const result = await response.json();

@@ -136,7 +136,7 @@ export default function page() {
                 </div>
               </div>
             ))}
-            <div className="input_container m-t-20">
+            {/* <div className="input_container m-t-20">
               <span className="category">비밀번호</span>
               <div className="flex-mob">
                 <label htmlFor="pw" className="input_title">
@@ -150,16 +150,19 @@ export default function page() {
                   변경하기
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="btn_wrap m-t-50">
             <button
               type="button"
-              className="btn-01"
+              className="btn-02 w-100"
               // onclick="showModal('quitModal')"
             >
-              탈퇴하기
+              변경하기
             </button>
+            <a className="m-t-30 withdrawal" onClick={() => {}}>
+              탈퇴하기
+            </a>
           </div>
         </div>
       </div>
